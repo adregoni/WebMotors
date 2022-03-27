@@ -1,0 +1,36 @@
+﻿@model Web.UI.Models.AnuncioViewModel
+@{
+    ViewData["Title"] = "Excluir Anuncio";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div>
+    <h4>Deseja excluir Anuncio?</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Marca)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Marca)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Modelo)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Modelo)
+        </dd>
+         <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Versao)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Versao)
+        </dd>
+    </dl>
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Excluir" class="btn btn-danger" />
+        <a class="btn btn-info" asp-action="Index">Voltar</a>
+    </form>
+</div>

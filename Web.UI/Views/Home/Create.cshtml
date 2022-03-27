@@ -1,0 +1,144 @@
+﻿@model Web.UI.Models.AnuncioViewModel
+@{
+    ViewBag.Title = "Anuncios";
+}
+
+<h2>Criar Anuncio</h2>
+<p>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-horizontal">
+            <hr />
+            <div class="form-group">
+                @Html.LabelFor(model => model.Marca, htmlAttributes: new { @class = "control-label" })
+                <br />
+                @Html.DropDownListFor(model => model.Marca, ViewBag.Marcas as SelectList, String.Empty, new { @id = "Marca", @class = "chosen-select", @style = "width: 50%" })
+                <br />
+                @Html.ValidationMessageFor(model => model.Marca)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Modelo, htmlAttributes: new { @class = "control-label" })
+                <br />
+                @Html.DropDownListFor(model => model.Modelo, new List<SelectListItem> { }, String.Empty, new { @id = "Modelo", @class = "chosen-select", @style = "width: 50%" })
+                <br />
+                @Html.ValidationMessageFor(model => model.Modelo)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Versao, htmlAttributes: new { @class = "control-label" })
+                <br />
+                @Html.DropDownListFor(model => model.Versao,  new List<SelectListItem> { },  String.Empty, new { @id = "Versao", @class = "chosen-select", @style = "width: 50%" })
+                <br />
+                @Html.ValidationMessageFor(model => model.Versao)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Ano, htmlAttributes: new { @class = "control-label" })
+                <br />
+                @Html.EditorFor(model => model.Ano, new { htmlAttributes = new { @class = "form-control", @style = "width: 50%"  } })
+                <br />
+                @Html.ValidationMessageFor(model => model.Ano, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Quilometragem, htmlAttributes: new { @class = "control-label" })
+                <br />
+                @Html.EditorFor(model => model.Quilometragem, new { htmlAttributes = new { @class = "form-control", @style = "width: 50%"  } })
+                <br />
+                @Html.ValidationMessageFor(model => model.Quilometragem, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    <label asp-for="Observacao" class="control-label"></label>
+                    <textarea asp-for="Observacao" style="resize:none" class="form-control"></textarea>
+                    <span asp-validation-for="Observacao" class="text-danger"></span>
+                </div>
+
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Cadastrar" class="btn btn-primary" />
+                <a class="btn btn-info" asp-action="Index">Voltar</a>
+            </div>
+        </div>
+    }
+
+    @section Scripts {
+
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+
+            var marca = $("#Marca");
+            var modelo = $("#Modelo");
+            var versao = $("#Versao");
+
+            modelo.prop('disabled',true);
+            versao.prop('disabled',true);
+
+            marca.change(function () {
+
+               var marcaId = $("#Marca option:selected").val();
+               var descricao = $("#Marca option:selected").text();
+
+               if (marcaId=="0"){
+                   modelo.prop('disabled',true);
+                   modelo.val("0");
+               }
+               else {
+                   $.ajax({
+                       type: "GET",
+                       url: "@Url.Action("ObterModelo", "Home")",
+                       data: { marcaId: marcaId, descricao:descricao },
+                       success: function (data) {
+                          modelo.prop('disabled',false);
+                          modelo.empty();
+                          modelo.append($('<option/>', { value:'0', text: 'Selecione...'}));
+
+                          $(data).each(function (index,item){
+                              modelo.append($('<option/>',{ value: item.nome, text: item.nome }));
+                          });
+                       }
+                   });
+               }
+            });
+
+            modelo.change(function () {
+
+                var valor = $(this).val();
+
+                 if (valor=="0"){
+                   versao.prop('disabled',true);
+                   versao.val("0");
+               }
+               else {
+                  $.ajax({
+                      type: "GET",
+                      url: "@Url.Action("ObterVersao", "Home")",
+                      data: { modeloId: valor },
+                      success: function (data) {
+                         versao.prop('disabled',false);
+                         versao.empty();
+                         versao.append($('<option/>', { value:'', text: 'Selecione...'}));
+
+                         $(data).each(function (index,item){
+                             versao.append($('<option/>',{ value: item.nome, text: item.nome }));
+                         });
+                      }
+                  });
+
+               }
+            });
+
+            function update() {
+                var select = document.getElementById('marca');
+                var option = select.options[select.selectedIndex];
+
+                document.getElementById('value').value = option.value;
+                document.getElementById('text').value = option.text;
+            }
+        });
+    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+  }
+
+    

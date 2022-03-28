@@ -1,17 +1,18 @@
 # WebMotors
 Sistema Anuncios - 
 
-Web API
-Asp.NET MVC Core
-Fluent-Validator
-Code-Fisrt
-AutoMapper
-Ajax
-JavaScript
-Flurl-HTTP
-MSTEST
-SqlServer 
+### Web API
+### Asp.NET MVC Core
+### Fluent-Validator
+### Code-First
+### AutoMapper
+### Ajax
+### JavaScript
+### Flurl-HTTP
+### MSTEST
+### SqlServer 
 
-Update-Database Create BD
+Para criação do Banco, necessário aplicar 
+  ### Update-Database Create BD
 
 
